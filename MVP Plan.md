@@ -115,9 +115,9 @@ Rencana ini dibagi menjadi 5 Milestone utama yang berfokus pada pembangunan anta
 *   [x] **Persistence Layer:** Integrasi API untuk menyimpan hasil ke database.
 
 ### Milestone 3: Analytical Dashboard (Data Visualization)
-*   [ ] **Summary Cards:** Implementasi kartu statistik interaktif pada dashboard utama.
-*   [ ] **Dynamic Charts:** Integrasi grafik tren (Line Chart) dan distribusi (Pie Chart) menggunakan data dari database.
-*   [ ] **Responsive Dashboard Layout:** Memastikan dashboard tampil sempurna di berbagai ukuran layar.
+*   [x] **Summary Cards:** Implementasi kartu statistik interaktif pada dashboard utama.
+*   [x] **Dynamic Charts:** Integrasi grafik tren (Line Chart) dan distribusi (Pie Chart) menggunakan data dari database.
+*   [x] **Responsive Dashboard Layout:** Memastikan dashboard tampil sempurna di berbagai ukuran layar.
 
 ### Milestone 4: Reporting & Historical Data (Data Management)
 *   [ ] **Advanced Data Table:** Pembangunan tabel riwayat dengan fitur sorting, searching, dan pagination.
