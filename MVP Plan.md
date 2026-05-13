@@ -103,30 +103,30 @@ Untuk membangun MVP yang cepat, stabil, dan memiliki estetika premium:
 Rencana ini dibagi menjadi 5 Milestone utama yang berfokus pada pembangunan antarmuka pengguna (UI), pengalaman pengguna (UX), dan integrasi sistem.
 
 ### Milestone 1: Foundation & Authentication (Visual Identity)
-*   **Setup Base Theme:** Konfigurasi sistem desain (warna premium PLN, tipografi, dan mode gelap/terang).
-*   **Shared Components:** Pembuatan komponen reusable seperti Buttons, Inputs, Cards, dan Modals.
-*   **Authentication Flow:** Implementasi halaman Login yang estetik dan sistem proteksi rute (Admin vs Operator) menggunakan Middleware.
-*   **Main Layout:** Pembangunan struktur navigasi (Sidebar/Navbar) yang responsif.
+*   [x] **Setup Base Theme:** Konfigurasi sistem desain (warna premium PLN, tipografi, dan mode gelap/terang).
+*   [x] **Shared Components:** Pembuatan komponen reusable seperti Buttons, Inputs, Cards, dan Modals.
+*   [x] **Authentication Flow:** Implementasi halaman Login yang estetik dan sistem proteksi rute (Admin vs Operator) menggunakan Middleware.
+*   [x] **Main Layout:** Pembangunan struktur navigasi (Sidebar/Navbar) yang responsif.
 
 ### Milestone 2: Operator Workflow (The Core UI)
-*   **Smart Input Form:** Pembangunan form input parameter air dengan validasi real-time dan pengalaman pengguna yang intuitif.
-*   **Classification Interface:** Desain halaman transisi (loading state) saat proses klasifikasi berjalan.
-*   **Result Presentation:** Implementasi halaman hasil klasifikasi dengan tipografi besar, animasi masuk (Framer Motion), dan ringkasan parameter.
-*   **Persistence Layer:** Integrasi API untuk menyimpan hasil ke database.
+*   [x] **Smart Input Form:** Pembangunan form input parameter air dengan validasi real-time dan pengalaman pengguna yang intuitif.
+*   [x] **Classification Interface:** Desain halaman transisi (loading state) saat proses klasifikasi berjalan.
+*   [x] **Result Presentation:** Implementasi halaman hasil klasifikasi dengan tipografi besar, animasi masuk (Framer Motion), dan ringkasan parameter.
+*   [x] **Persistence Layer:** Integrasi API untuk menyimpan hasil ke database.
 
 ### Milestone 3: Analytical Dashboard (Data Visualization)
-*   **Summary Cards:** Implementasi kartu statistik interaktif pada dashboard utama.
-*   **Dynamic Charts:** Integrasi grafik tren (Line Chart) dan distribusi (Pie Chart) menggunakan data dari database.
-*   **Responsive Dashboard Layout:** Memastikan dashboard tampil sempurna di berbagai ukuran layar.
+*   [ ] **Summary Cards:** Implementasi kartu statistik interaktif pada dashboard utama.
+*   [ ] **Dynamic Charts:** Integrasi grafik tren (Line Chart) dan distribusi (Pie Chart) menggunakan data dari database.
+*   [ ] **Responsive Dashboard Layout:** Memastikan dashboard tampil sempurna di berbagai ukuran layar.
 
 ### Milestone 4: Reporting & Historical Data (Data Management)
-*   **Advanced Data Table:** Pembangunan tabel riwayat dengan fitur sorting, searching, dan pagination.
-*   **Filter System:** Implementasi filter berdasarkan rentang tanggal, unit, dan status kelayakan.
-*   **Export Integration:** Pengembangan fitur export data ke format PDF atau Excel langsung dari browser.
+*   [ ] **Advanced Data Table:** Pembangunan tabel riwayat dengan fitur sorting, searching, dan pagination.
+*   [ ] **Filter System:** Implementasi filter berdasarkan rentang tanggal, unit, dan status kelayakan.
+*   [ ] **Export Integration:** Pengembangan fitur export data ke format PDF atau Excel langsung dari browser.
 
 ### Milestone 5: Admin Workspace & Final Polish (Control & UX)
-*   **User Management UI:** Pembangunan dashboard kelola user (Tabel user, Form tambah/edit user).
-*   **Model Performance UI:** Implementasi halaman visualisasi performa model (Confusion Matrix & Feature Importance charts).
-*   **Micro-interactions:** Penambahan animasi halus, toast notifications, dan transisi halaman untuk kesan premium.
-*   **Optimization:** Audit performa dan perbaikan UI bug.
+*   [ ] **User Management UI:** Pembangunan dashboard kelola user (Tabel user, Form tambah/edit user).
+*   [ ] **Model Performance UI:** Implementasi halaman visualisasi performa model (Confusion Matrix & Feature Importance charts).
+*   [ ] **Micro-interactions:** Penambahan animasi halus, toast notifications, dan transisi halaman untuk kesan premium.
+*   [ ] **Optimization:** Audit performa dan perbaikan UI bug.
 
