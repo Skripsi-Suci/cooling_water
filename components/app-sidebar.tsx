@@ -41,6 +41,11 @@ const data = {
       icon: <IconReport />,
     },
     {
+      title: "Performa Model",
+      url: "/dashboard/performance",
+      icon: <IconChartBar />,
+    },
+    {
       title: "Kelola User",
       url: "/dashboard/users",
       icon: <IconUsers />,
