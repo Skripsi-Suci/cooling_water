@@ -125,8 +125,8 @@ Rencana ini dibagi menjadi 5 Milestone utama yang berfokus pada pembangunan anta
 *   [x] **Export Integration:** Pengembangan fitur export data ke format PDF atau Excel langsung dari browser.
 
 ### Milestone 5: Admin Workspace & Final Polish (Control & UX)
-*   [ ] **User Management UI:** Pembangunan dashboard kelola user (Tabel user, Form tambah/edit user).
-*   [ ] **Model Performance UI:** Implementasi halaman visualisasi performa model (Confusion Matrix & Feature Importance charts).
-*   [ ] **Micro-interactions:** Penambahan animasi halus, toast notifications, dan transisi halaman untuk kesan premium.
-*   [ ] **Optimization:** Audit performa dan perbaikan UI bug.
+*   [x] **User Management UI:** Pembangunan dashboard kelola user (Tabel user, Form tambah/edit user).
+*   [x] **Model Performance UI:** Implementasi halaman visualisasi performa model (Confusion Matrix & Feature Importance charts).
+*   [x] **Micro-interactions:** Penambahan animasi halus, toast notifications, dan transisi halaman untuk kesan premium.
+*   [x] **Optimization:** Audit performa dan perbaikan UI bug.
 

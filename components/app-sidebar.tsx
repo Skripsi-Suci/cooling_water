@@ -2,9 +2,7 @@
 
 import * as React from "react"
 
-import { NavDocuments } from "@/components/nav-documents"
 import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
@@ -15,15 +13,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { IconDashboard, IconListDetails, IconChartBar, IconFolder, IconUsers, IconCamera, IconFileDescription, IconFileAi, IconSettings, IconHelp, IconSearch, IconDatabase, IconReport, IconFileWord, IconInnerShadowTop } from "@tabler/icons-react"
+import { IconDashboard, IconListDetails, IconChartBar, IconUsers, IconReport } from "@tabler/icons-react"
 import { Zap } from "lucide-react"
+import Link from "next/link"
 
 const data = {
-  user: {
-    name: "Operator",
-    email: "operator@pln.co.id",
-    avatar: "/avatars/operator.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -31,12 +25,12 @@ const data = {
       icon: <IconDashboard />,
     },
     {
-      title: "Input Data",
+      title: "Input Klasifikasi",
       url: "/dashboard/input",
       icon: <IconListDetails />,
     },
     {
-      title: "Riwayat & Laporan",
+      title: "Riwayat Analisis",
       url: "/dashboard/reports",
       icon: <IconReport />,
     },
@@ -51,18 +45,6 @@ const data = {
       icon: <IconUsers />,
     },
   ],
-  navSecondary: [
-    {
-      title: "Pengaturan",
-      url: "/dashboard/settings",
-      icon: <IconSettings />,
-    },
-    {
-      title: "Bantuan",
-      url: "/dashboard/help",
-      icon: <IconHelp />,
-    },
-  ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -75,7 +57,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
-              <a href="/dashboard">
+              <Link href="/dashboard">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-primary/20">
                   <Zap className="size-5 fill-current" />
                 </div>
@@ -87,17 +69,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     PLN NP UP Arun
                   </span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={{ name: "User", email: "user@pln.co.id", avatar: "" }} />
       </SidebarFooter>
     </Sidebar>
   )
