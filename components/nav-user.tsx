@@ -78,17 +78,6 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <IconUserCircle />
-                Profil
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconNotification />
-                Notifikasi
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => signOut()}>
               <IconLogout />
               Keluar

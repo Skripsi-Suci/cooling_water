@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { DashboardBreadcrumbs } from "@/components/dashboard/breadcrumbs"
+import { ModeToggle } from "@/components/mode-toggle"
 
 export function SiteHeader() {
   return (
@@ -13,6 +14,9 @@ export function SiteHeader() {
           className="mx-2 data-[orientation=vertical]:h-4"
         />
         <DashboardBreadcrumbs />
+        <div className="ml-auto">
+          <ModeToggle />
+        </div>
       </div>
     </header>
   )

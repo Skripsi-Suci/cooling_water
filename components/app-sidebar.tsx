@@ -4,6 +4,7 @@ import * as React from "react"
 
 import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user"
+import { createClient } from "@/lib/supabase/client"
 import {
   Sidebar,
   SidebarContent,
@@ -48,6 +49,54 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [mounted, setMounted] = React.useState(false);
+  const [userProfile, setUserProfile] = React.useState<{
+    full_name: string;
+    email: string;
+    role: string;
+  } | null>(null);
+  
+  const supabase = createClient();
+
+  React.useEffect(() => {
+    setMounted(true);
+    async function getUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name, role')
+          .eq('id', user.id)
+          .single();
+        
+        setUserProfile({
+          full_name: profile?.full_name || user.email?.split('@')[0] || 'User',
+          email: user.email || '',
+          role: profile?.role || 'operator'
+        });
+      }
+    }
+    getUser();
+  }, []);
+
+  // Filter items based on role
+  const filteredNavItems = data.navMain.filter(item => {
+    if (item.title === "Kelola User" && userProfile?.role !== 'admin') {
+      return false;
+    }
+    return true;
+  });
+
+  if (!mounted) {
+    return (
+      <Sidebar collapsible="offcanvas" {...props}>
+        <SidebarHeader className="h-(--header-height) border-b" />
+        <SidebarContent />
+        <SidebarFooter className="h-14" />
+      </Sidebar>
+    );
+  }
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -75,10 +124,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={filteredNavItems} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={{ name: "User", email: "user@pln.co.id", avatar: "" }} />
+        <NavUser user={{ 
+          name: userProfile?.full_name || "Loading...", 
+          email: userProfile?.email || "...", 
+          avatar: "" 
+        }} />
       </SidebarFooter>
     </Sidebar>
   )

@@ -1,0 +1,82 @@
+'use server'
+
+import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { revalidatePath } from 'next/cache'
+
+async function checkAdmin() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return false
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  return profile?.role === 'admin'
+}
+
+export async function getUsers() {
+  if (!(await checkAdmin())) return { success: false, error: 'Unauthorized' }
+  
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .order('full_name')
+
+  return { success: true, data }
+}
+
+export async function upsertUser(formData: any) {
+  if (!(await checkAdmin())) return { success: false, error: 'Unauthorized' }
+  
+  const admin = createAdminClient()
+  const { id, email, password, full_name, role } = formData
+
+  if (id) {
+    // Update existing profile
+    const { error: profileError } = await admin
+      .from('profiles')
+      .update({ full_name, role })
+      .eq('id', id)
+
+    if (profileError) return { success: false, error: profileError.message }
+  } else {
+    // Create new user in Auth
+    const { data: authUser, error: authError } = await admin.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: { full_name, role }
+    })
+
+    if (authError) return { success: false, error: authError.message }
+
+    // Profile will be created automatically by DB trigger, 
+    // but we update it to ensure roles are correct
+    await admin
+      .from('profiles')
+      .update({ full_name, role })
+      .eq('id', authUser.user.id)
+  }
+
+  revalidatePath('/dashboard/users')
+  return { success: true }
+}
+
+export async function deleteUser(id: string) {
+  if (!(await checkAdmin())) return { success: false, error: 'Unauthorized' }
+  
+  const admin = createAdminClient()
+  
+  // Delete from Auth (will cascade to profile if FK is set, or we handle it)
+  const { error } = await admin.auth.admin.deleteUser(id)
+
+  if (error) return { success: false, error: error.message }
+
+  revalidatePath('/dashboard/users')
+  return { success: true }
+}
