@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { classificationSchema, type ClassificationInput } from '@/lib/schema'
 import { processClassification } from './actions'
@@ -22,7 +22,7 @@ export default function InputPage() {
   } | null>(null)
 
   const form = useForm<ClassificationInput>({
-    resolver: zodResolver(classificationSchema),
+    resolver: zodResolver(classificationSchema) as any,
     defaultValues: {
       unit_name: 'Unit 1',
       engine_id: '',
@@ -36,7 +36,7 @@ export default function InputPage() {
     }
   })
 
-  const onSubmit: SubmitHandler<ClassificationInput> = async (data) => {
+  const onSubmit = async (data: ClassificationInput) => {
     setIsSubmitting(true)
     try {
       const response = await processClassification(data)
@@ -71,114 +71,103 @@ export default function InputPage() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
           >
-            <Card className="border-border/50 shadow-xl overflow-hidden">
-              <CardHeader className="bg-primary/5 border-b border-border/50">
-                <CardTitle className="text-2xl font-bold text-primary">Input Parameter Air</CardTitle>
-                <CardDescription>Masukkan data teknis cooling water untuk klasifikasi otomatis.</CardDescription>
+            <Card className="border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden rounded-2xl bg-white dark:bg-slate-950">
+              <CardHeader className="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800 py-6 px-8">
+                <CardTitle className="text-xl font-bold text-slate-800 dark:text-slate-100">Input Data Parameter Cooling Water</CardTitle>
               </CardHeader>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <CardContent className="p-6 space-y-8">
-                  {/* Bagian A: Identitas */}
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 text-foreground/80">
-                      <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold">A</span>
-                      Identitas Unit
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="unit_name">Unit Mesin</Label>
-                        <Select 
-                          onValueChange={(val) => form.setValue('unit_name', val)}
-                          defaultValue="Unit 1"
-                        >
-                          <SelectTrigger className="bg-background/50">
-                            <SelectValue placeholder="Pilih Unit" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Unit 1">Unit 1 - GT 1.1</SelectItem>
-                            <SelectItem value="Unit 2">Unit 2 - GT 1.2</SelectItem>
-                            <SelectItem value="Unit 3">Unit 3 - GT 1.3</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {form.formState.errors.unit_name && <p className="text-xs text-destructive">{form.formState.errors.unit_name.message}</p>}
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="engine_id">Engine ID</Label>
-                        <Input 
-                          id="engine_id" 
-                          placeholder="Contoh: E102-X" 
-                          {...form.register('engine_id')} 
-                          className="bg-background/50"
-                        />
-                        {form.formState.errors.engine_id && <p className="text-xs text-destructive">{form.formState.errors.engine_id.message}</p>}
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="running_hour">Running Hour (Hours)</Label>
-                        <Input 
-                          id="running_hour" 
-                          type="number" 
-                          step="0.1"
-                          placeholder="0.0" 
-                          {...form.register('running_hour')} 
-                          className="bg-background/50"
-                        />
-                        {form.formState.errors.running_hour && <p className="text-xs text-destructive">{form.formState.errors.running_hour.message}</p>}
-                      </div>
+              <form onSubmit={form.handleSubmit(onSubmit as any)}>
+                <CardContent className="p-8 space-y-10">
+                  {/* Bagian 1: Identitas & Waktu */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="date" className="text-base font-medium">Tanggal</Label>
+                      <Input 
+                        id="date" 
+                        type="date" 
+                        {...form.register('date')} 
+                        className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11 focus:ring-primary focus:border-primary"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="unit_name" className="text-base font-medium">Unit</Label>
+                      <Select 
+                        onValueChange={(val) => form.setValue('unit_name', val)}
+                        defaultValue="Unit 1"
+                      >
+                        <SelectTrigger className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11">
+                          <SelectValue placeholder="Pilih Unit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Unit 1">Unit 1</SelectItem>
+                          <SelectItem value="Unit 2">Unit 2</SelectItem>
+                          <SelectItem value="Unit 3">Unit 3</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="engine_id" className="text-base font-medium">Engine</Label>
+                      <Input 
+                        id="engine_id" 
+                        placeholder="ID Mesin" 
+                        {...form.register('engine_id')} 
+                        className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="running_hour" className="text-base font-medium">Running Hour</Label>
+                      <Input 
+                        id="running_hour" 
+                        type="number" 
+                        step="0.1"
+                        placeholder="Jam Operasi" 
+                        {...form.register('running_hour')} 
+                        className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11"
+                      />
                     </div>
                   </div>
 
-                  {/* Bagian B: Parameter Teknis */}
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold flex items-center gap-2 text-foreground/80">
-                      <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold">B</span>
-                      Parameter Teknis (Kimia)
-                    </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                  <div className="border-t border-slate-200 dark:border-slate-800 pt-8 space-y-6">
+                    <h3 className="text-lg font-bold text-slate-700 dark:text-slate-300">Parameter Cooling Water</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                       <div className="space-y-2">
-                        <Label htmlFor="ph">pH</Label>
-                        <Input id="ph" type="number" step="0.01" {...form.register('ph')} className="bg-background/50" />
-                        {form.formState.errors.ph && <p className="text-xs text-destructive">{form.formState.errors.ph.message}</p>}
+                        <Label htmlFor="ph" className="text-base font-medium">pH</Label>
+                        <Input id="ph" type="number" step="0.01" {...form.register('ph')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="sc">SC (µS/cm)</Label>
-                        <Input id="sc" type="number" {...form.register('sc')} className="bg-background/50" />
-                        {form.formState.errors.sc && <p className="text-xs text-destructive">{form.formState.errors.sc.message}</p>}
+                        <Label htmlFor="sc" className="text-base font-medium">SC</Label>
+                        <Input id="sc" type="number" {...form.register('sc')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="nitrite">Nitrite (mg/L)</Label>
-                        <Input id="nitrite" type="number" {...form.register('nitrite')} className="bg-background/50" />
-                        {form.formState.errors.nitrite && <p className="text-xs text-destructive">{form.formState.errors.nitrite.message}</p>}
+                        <Label htmlFor="nitrite" className="text-base font-medium">Nitrite</Label>
+                        <Input id="nitrite" type="number" {...form.register('nitrite')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="iron">Fe / Besi (mg/L)</Label>
-                        <Input id="iron" type="number" step="0.01" {...form.register('iron')} className="bg-background/50" />
-                        {form.formState.errors.iron && <p className="text-xs text-destructive">{form.formState.errors.iron.message}</p>}
+                        <Label htmlFor="iron" className="text-base font-medium">Fe</Label>
+                        <Input id="iron" type="number" step="0.01" {...form.register('iron')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="sulfate">Sulfate (mg/L)</Label>
-                        <Input id="sulfate" type="number" {...form.register('sulfate')} className="bg-background/50" />
-                        {form.formState.errors.sulfate && <p className="text-xs text-destructive">{form.formState.errors.sulfate.message}</p>}
+                        <Label htmlFor="sulfate" className="text-base font-medium">Sulfate</Label>
+                        <Input id="sulfate" type="number" {...form.register('sulfate')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="turbidity">Turbidity (NTU)</Label>
-                        <Input id="turbidity" type="number" step="0.1" {...form.register('turbidity')} className="bg-background/50" />
-                        {form.formState.errors.turbidity && <p className="text-xs text-destructive">{form.formState.errors.turbidity.message}</p>}
+                        <Label htmlFor="turbidity" className="text-base font-medium">Turbidity</Label>
+                        <Input id="turbidity" type="number" step="0.1" {...form.register('turbidity')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                     </div>
                   </div>
                 </CardContent>
-                <div className="p-6 bg-muted/30 border-t border-border/50 flex justify-end gap-3">
-                  <Button variant="outline" type="button" onClick={() => form.reset()} disabled={isSubmitting}>
+                <div className="p-8 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-900/20">
+                  <Button variant="outline" type="button" onClick={() => form.reset()} disabled={isSubmitting} className="min-w-[140px] h-12 border-slate-300 text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-400">
                     Batal
                   </Button>
-                  <Button type="submit" className="min-w-[150px]" disabled={isSubmitting}>
+                  <Button type="submit" className="min-w-[180px] h-12 text-lg font-bold shadow-lg shadow-primary/20" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Menganalisis...
+                        <Loader2 className="mr-2 h-5 w-4 animate-spin" />
+                        Memproses...
                       </>
                     ) : (
-                      'Mulai Klasifikasi'
+                      'Klasifikasi'
                     )}
                   </Button>
                 </div>
