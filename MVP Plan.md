@@ -120,9 +120,9 @@ Rencana ini dibagi menjadi 5 Milestone utama yang berfokus pada pembangunan anta
 *   [x] **Responsive Dashboard Layout:** Memastikan dashboard tampil sempurna di berbagai ukuran layar.
 
 ### Milestone 4: Reporting & Historical Data (Data Management)
-*   [ ] **Advanced Data Table:** Pembangunan tabel riwayat dengan fitur sorting, searching, dan pagination.
-*   [ ] **Filter System:** Implementasi filter berdasarkan rentang tanggal, unit, dan status kelayakan.
-*   [ ] **Export Integration:** Pengembangan fitur export data ke format PDF atau Excel langsung dari browser.
+*   [x] **Advanced Data Table:** Pembangunan tabel riwayat dengan fitur sorting, searching, dan pagination.
+*   [x] **Filter System:** Implementasi filter berdasarkan rentang tanggal, unit, dan status kelayakan.
+*   [x] **Export Integration:** Pengembangan fitur export data ke format PDF atau Excel langsung dari browser.
 
 ### Milestone 5: Admin Workspace & Final Polish (Control & UX)
 *   [ ] **User Management UI:** Pembangunan dashboard kelola user (Tabel user, Form tambah/edit user).
