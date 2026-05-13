@@ -16,162 +16,46 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { IconDashboard, IconListDetails, IconChartBar, IconFolder, IconUsers, IconCamera, IconFileDescription, IconFileAi, IconSettings, IconHelp, IconSearch, IconDatabase, IconReport, IconFileWord, IconInnerShadowTop } from "@tabler/icons-react"
+import { Zap } from "lucide-react"
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "Operator",
+    email: "operator@pln.co.id",
+    avatar: "/avatars/operator.jpg",
   },
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
-      icon: (
-        <IconDashboard
-        />
-      ),
+      url: "/dashboard",
+      icon: <IconDashboard />,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: (
-        <IconListDetails
-        />
-      ),
+      title: "Input Data",
+      url: "/dashboard/input",
+      icon: <IconListDetails />,
     },
     {
-      title: "Analytics",
-      url: "#",
-      icon: (
-        <IconChartBar
-        />
-      ),
+      title: "Riwayat & Laporan",
+      url: "/dashboard/reports",
+      icon: <IconReport />,
     },
     {
-      title: "Projects",
-      url: "#",
-      icon: (
-        <IconFolder
-        />
-      ),
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: (
-        <IconUsers
-        />
-      ),
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: (
-        <IconCamera
-        />
-      ),
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: (
-        <IconFileDescription
-        />
-      ),
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: (
-        <IconFileAi
-        />
-      ),
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
+      title: "Kelola User",
+      url: "/dashboard/users",
+      icon: <IconUsers />,
     },
   ],
   navSecondary: [
     {
-      title: "Settings",
-      url: "#",
-      icon: (
-        <IconSettings
-        />
-      ),
+      title: "Pengaturan",
+      url: "/dashboard/settings",
+      icon: <IconSettings />,
     },
     {
-      title: "Get Help",
-      url: "#",
-      icon: (
-        <IconHelp
-        />
-      ),
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: (
-        <IconSearch
-        />
-      ),
-    },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: (
-        <IconDatabase
-        />
-      ),
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: (
-        <IconReport
-        />
-      ),
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: (
-        <IconFileWord
-        />
-      ),
+      title: "Bantuan",
+      url: "/dashboard/help",
+      icon: <IconHelp />,
     },
   ],
 }
@@ -186,9 +70,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
-              <a href="#">
-                <IconInnerShadowTop className="size-5!" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+              <a href="/dashboard">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+                  <Zap className="size-5 fill-current" />
+                </div>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold text-foreground">
+                    Cooling Water
+                  </span>
+                  <span className="truncate text-xs text-muted-foreground">
+                    PLN NP UP Arun
+                  </span>
+                </div>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -196,7 +89,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
