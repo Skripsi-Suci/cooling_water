@@ -4,13 +4,36 @@ import { createClient } from '@/lib/supabase/server'
 import { classificationSchema, type ClassificationInput } from '@/lib/schema'
 import { revalidatePath } from 'next/cache'
 
+// const DEFAULT_BACKEND_URL = 'https://huggingface.co/spaces/itsprzvl/model_randomforest_suci'
+const DEFAULT_BACKEND_URL = 'https://huggingface.co/spaces/itsprzvl/model_randomforest_suci'
+
+function resolveBackendBaseUrl() {
+  const rawUrl = (process.env.BACKEND_API_URL || DEFAULT_BACKEND_URL).trim().replace(/\/+$/, '')
+
+  try {
+    const parsedUrl = new URL(rawUrl)
+
+    if (parsedUrl.hostname === 'huggingface.co' && parsedUrl.pathname.startsWith('/spaces/')) {
+      const pathParts = parsedUrl.pathname.split('/').filter(Boolean)
+      const [, owner, spaceName] = pathParts
+      if (owner && spaceName) {
+        return `https://${owner}-${spaceName}.hf.space`
+      }
+    }
+
+    return parsedUrl.toString()
+  } catch {
+    return rawUrl
+  }
+}
+
 export async function processClassification(data: ClassificationInput) {
   const supabase = await createClient()
   
   // Validate data
   const validated = classificationSchema.parse(data)
 
-  const backendUrl = process.env.BACKEND_API_URL || 'http://localhost:5000'
+  const backendUrl = resolveBackendBaseUrl()
   let flaskResponse;
 
   try {
@@ -35,11 +58,12 @@ export async function processClassification(data: ClassificationInput) {
     }
 
     flaskResponse = await res.json()
-  } catch (err: any) {
-    console.error("Failed to connect to Python backend:", err)
+  } catch (error: unknown) {
+    console.error("Failed to connect to Python backend:", error)
+    const detail = error instanceof Error ? error.message : String(error)
     return { 
       success: false,
-      error: `Gagal memproses data dengan model AI. Hubungi admin atau pastikan server Flask berjalan di port 5000. Detail: ${err.message || err}` 
+      error: `Gagal memproses data dengan model AI. Hubungi admin atau pastikan Hugging Face Space model aktif. Detail: ${detail}` 
     }
   }
 
@@ -94,7 +118,7 @@ export async function processClassification(data: ClassificationInput) {
 }
 
 export async function checkBackendStatus() {
-  const backendUrl = process.env.BACKEND_API_URL || 'http://localhost:5000'
+  const backendUrl = resolveBackendBaseUrl()
   try {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 1500)
@@ -106,7 +130,7 @@ export async function checkBackendStatus() {
     
     clearTimeout(timeoutId)
     return { online: res.ok }
-  } catch (err) {
+  } catch {
     return { online: false }
   }
 }
