@@ -103,7 +103,7 @@ export default async function DashboardPage() {
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-primary" /> Tren Parameter
             </CardTitle>
-            <CardDescription>Fluktuasi pH, Besi (Fe), dan Turbidity pada 10 analisis terakhir.</CardDescription>
+            <CardDescription>Fluktuasi pH, SC, Nitrite, Fe, Sulfate, dan Turbidity pada 10 analisis terakhir.</CardDescription>
           </CardHeader>
           <CardContent className="pl-2">
             <TrendChart data={stats.trendData} />

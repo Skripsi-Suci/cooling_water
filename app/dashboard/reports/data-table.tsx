@@ -12,6 +12,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  FilterFn,
 } from "@tanstack/react-table"
 
 import {
@@ -46,6 +47,14 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [globalFilter, setGlobalFilter] = React.useState("")
+
+  const globalFilterFn: FilterFn<TData> = (row, columnId, filterValue) => {
+    const search = String(filterValue).toLowerCase()
+    return Object.values(row.original as object).some((val) =>
+      String(val ?? "").toLowerCase().includes(search)
+    )
+  }
 
   const table = useReactTable({
     data,
@@ -58,23 +67,59 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    globalFilterFn,
+    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      globalFilter,
     },
   })
 
   const exportCSV = () => {
     if (!data.length) return
     
-    const headers = Object.keys(data[0] as object).join(",")
+    const exportKeys = [
+      "date",
+      "unit_name",
+      "engine_id",
+      "running_hour",
+      "ph",
+      "sc",
+      "nitrite",
+      "iron",
+      "sulfate",
+      "turbidity",
+      "result"
+    ]
+    
+    const headers = [
+      "Tanggal",
+      "Unit",
+      "Engine ID",
+      "Running Hour",
+      "pH",
+      "SC",
+      "Nitrite",
+      "Fe (Besi)",
+      "Sulfate",
+      "Turbidity",
+      "Hasil"
+    ].join(",")
+
     const csvContent = data.map(row => {
-      return Object.values(row as object).join(",")
+      return exportKeys.map(key => {
+        const val = (row as any)[key]
+        if (typeof val === 'string') {
+          return `"${val.replace(/"/g, '""')}"`
+        }
+        return val !== null && val !== undefined ? val : ""
+      }).join(",")
     }).join("\n")
     
-    const blob = new Blob([`${headers}\n${csvContent}`], { type: "text/csv" })
+    const blob = new Blob([`${headers}\n${csvContent}`], { type: "text/csv;charset=utf-8;" })
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
@@ -89,11 +134,9 @@ export function DataTable<TData, TValue>({
         <div className="relative w-full md:max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Cari Unit atau Engine ID..."
-            value={(table.getColumn("unit_name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("unit_name")?.setFilterValue(event.target.value)
-            }
+            placeholder="Cari unit, engine ID, hasil, parameter..."
+            value={globalFilter ?? ""}
+            onChange={(event) => setGlobalFilter(event.target.value)}
             className="pl-10 bg-background/50"
           />
         </div>

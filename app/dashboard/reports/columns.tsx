@@ -53,12 +53,28 @@ export const columns: ColumnDef<Classification>[] = [
     header: "Engine ID",
   },
   {
+    accessorKey: "running_hour",
+    header: "Running Hour",
+  },
+  {
     accessorKey: "ph",
     header: "pH",
   },
   {
+    accessorKey: "sc",
+    header: "SC",
+  },
+  {
+    accessorKey: "nitrite",
+    header: "Nitrite",
+  },
+  {
     accessorKey: "iron",
     header: "Fe (Besi)",
+  },
+  {
+    accessorKey: "sulfate",
+    header: "Sulfate",
   },
   {
     accessorKey: "turbidity",

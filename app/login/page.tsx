@@ -139,16 +139,6 @@ function LoginForm() {
               </Button>
               
               <div className="flex flex-col items-center gap-4">
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="text-slate-500 dark:text-slate-400">Belum memiliki akses?</span>
-                  <Link
-                    href="/register"
-                    className="font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline-offset-4 hover:underline transition-all"
-                  >
-                    Daftar Akun
-                  </Link>
-                </div>
-                
                 <div className="flex items-center gap-4 opacity-40">
                   <div className="h-[1px] w-12 bg-slate-400" />
                   <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Corporate System</span>
@@ -170,3 +160,16 @@ export default function LoginPage() {
     </Suspense>
   )
 }
+
+/*
+REGISTRATION UI BACKUP (HIDDEN BUT NOT DELETED):
+<div className="flex items-center gap-2 text-sm">
+  <span className="text-slate-500 dark:text-slate-400">Belum memiliki akses?</span>
+  <Link
+    href="/register"
+    className="font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline-offset-4 hover:underline transition-all"
+  >
+    Daftar Akun
+  </Link>
+</div>
+*/

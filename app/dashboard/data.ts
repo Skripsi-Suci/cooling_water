@@ -26,7 +26,10 @@ export async function getDashboardStats() {
   const trendData = data.slice(0, 10).reverse().map(i => ({
     date: new Date(i.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short' }),
     ph: i.ph,
+    sc: i.sc,
+    nitrite: i.nitrite,
     iron: i.iron,
+    sulfate: i.sulfate,
     turbidity: i.turbidity
   }))
 

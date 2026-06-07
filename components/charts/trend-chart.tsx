@@ -6,6 +6,8 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
 } from "@/components/ui/chart"
 
 const chartConfig = {
@@ -13,9 +15,21 @@ const chartConfig = {
     label: "pH",
     color: "hsl(var(--primary))",
   },
+  sc: {
+    label: "SC",
+    color: "hsl(217, 91%, 60%)",
+  },
+  nitrite: {
+    label: "Nitrite",
+    color: "hsl(142, 71%, 45%)",
+  },
   iron: {
-    label: "Besi (Fe)",
+    label: "Fe (Besi)",
     color: "hsl(var(--chart-2))",
+  },
+  sulfate: {
+    label: "Sulfate",
+    color: "hsl(38, 92%, 50%)",
   },
   turbidity: {
     label: "Turbidity",
@@ -25,7 +39,7 @@ const chartConfig = {
 
 export function TrendChart({ data }: { data: any[] }) {
   return (
-    <ChartContainer config={chartConfig} className="h-[300px] w-full">
+    <ChartContainer config={chartConfig} className="h-[320px] w-full">
       <LineChart
         data={data}
         margin={{
@@ -50,29 +64,54 @@ export function TrendChart({ data }: { data: any[] }) {
           tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
+        <ChartLegend content={<ChartLegendContent />} />
         <Line
           type="monotone"
           dataKey="ph"
           stroke="var(--color-ph)"
-          strokeWidth={3}
-          dot={{ fill: 'var(--color-ph)', r: 4 }}
-          activeDot={{ r: 6 }}
+          strokeWidth={2}
+          dot={{ fill: 'var(--color-ph)', r: 3 }}
+          activeDot={{ r: 5 }}
+        />
+        <Line
+          type="monotone"
+          dataKey="sc"
+          stroke="var(--color-sc)"
+          strokeWidth={2}
+          dot={{ fill: 'var(--color-sc)', r: 3 }}
+          activeDot={{ r: 5 }}
+        />
+        <Line
+          type="monotone"
+          dataKey="nitrite"
+          stroke="var(--color-nitrite)"
+          strokeWidth={2}
+          dot={{ fill: 'var(--color-nitrite)', r: 3 }}
+          activeDot={{ r: 5 }}
         />
         <Line
           type="monotone"
           dataKey="iron"
           stroke="var(--color-iron)"
-          strokeWidth={3}
-          dot={{ fill: 'var(--color-iron)', r: 4 }}
-          activeDot={{ r: 6 }}
+          strokeWidth={2}
+          dot={{ fill: 'var(--color-iron)', r: 3 }}
+          activeDot={{ r: 5 }}
+        />
+        <Line
+          type="monotone"
+          dataKey="sulfate"
+          stroke="var(--color-sulfate)"
+          strokeWidth={2}
+          dot={{ fill: 'var(--color-sulfate)', r: 3 }}
+          activeDot={{ r: 5 }}
         />
         <Line
           type="monotone"
           dataKey="turbidity"
           stroke="var(--color-turbidity)"
-          strokeWidth={3}
-          dot={{ fill: 'var(--color-turbidity)', r: 4 }}
-          activeDot={{ r: 6 }}
+          strokeWidth={2}
+          dot={{ fill: 'var(--color-turbidity)', r: 3 }}
+          activeDot={{ r: 5 }}
         />
       </LineChart>
     </ChartContainer>
