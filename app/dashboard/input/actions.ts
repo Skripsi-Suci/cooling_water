@@ -6,11 +6,11 @@ import { revalidatePath } from 'next/cache'
 
 export async function processClassification(data: ClassificationInput) {
   const supabase = await createClient()
-  
+
   // Validate data
   const validated = classificationSchema.parse(data)
 
-  const backendUrl = process.env.BACKEND_API_URL || 'http://localhost:5000'
+  const backendUrl = process.env.BACKEND_API_URL || 'http://127.0.0.1:5000'
   let flaskResponse;
 
   try {
@@ -37,17 +37,17 @@ export async function processClassification(data: ClassificationInput) {
     flaskResponse = await res.json()
   } catch (err: any) {
     console.error("Failed to connect to Python backend:", err)
-    return { 
+    return {
       success: false,
-      error: `Gagal memproses data dengan model AI. Hubungi admin atau pastikan server Flask berjalan di port 5000. Detail: ${err.message || err}` 
+      error: `Gagal memproses data dengan model AI. Hubungi admin atau pastikan server Flask berjalan di port 5000. Detail: ${err.message || err}`
     }
   }
 
   // Determine final status for DB saving: 'layak' or 'tidak_layak'
   // Rules: If validasi_sop is "Tidak Layak" or status_prediksi is "Tidak Layak" -> 'tidak_layak'
-  const result: 'layak' | 'tidak_layak' = 
-    (flaskResponse.validasi_sop === 'Tidak Layak' || flaskResponse.status_prediksi === 'Tidak Layak') 
-      ? 'tidak_layak' 
+  const result: 'layak' | 'tidak_layak' =
+    (flaskResponse.validasi_sop === 'Tidak Layak' || flaskResponse.status_prediksi === 'Tidak Layak')
+      ? 'tidak_layak'
       : 'layak'
 
   // Construct readable analysis notes
@@ -84,26 +84,26 @@ export async function processClassification(data: ClassificationInput) {
 
   revalidatePath('/dashboard/reports')
   revalidatePath('/dashboard')
-  
-  return { 
-    success: true, 
-    result, 
+
+  return {
+    success: true,
+    result,
     analysisNotes,
     details: flaskResponse
   }
 }
 
 export async function checkBackendStatus() {
-  const backendUrl = process.env.BACKEND_API_URL || 'http://localhost:5000'
+  const backendUrl = process.env.BACKEND_API_URL || 'http://127.0.0.1:5000'
   try {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 1500)
-    
+
     const res = await fetch(`${backendUrl}/health`, {
       method: 'GET',
       signal: controller.signal
     })
-    
+
     clearTimeout(timeoutId)
     return { online: res.ok }
   } catch (err) {

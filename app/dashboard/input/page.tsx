@@ -155,19 +155,18 @@ export default function InputPage() {
             <Activity className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-slate-800 dark:text-slate-100">Klasifikasi Kualitas Air Pendingin</h1>
-            <p className="text-xs text-slate-500 font-medium">Prediksi kelayakan air pendingin terintegrasi dengan model Random Forest AI.</p>
+            <h1 className="text-lg font-bold text-slate-800 dark:text-slate-100">Klasifikasi Kualitas Cooling Water</h1>
+            <p className="text-xs text-slate-500 font-medium">Prediksi kelayakan cooling water terintegrasi dengan model Random Forest AI.</p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2 bg-slate-50/50 dark:bg-slate-900/50 px-3.5 py-2 rounded-full border border-slate-150 dark:border-slate-850 shadow-inner self-start sm:self-auto">
-          <div className={`w-2.5 h-2.5 rounded-full ${
-            apiStatus === 'online' ? 'bg-emerald-500 animate-pulse' :
-            apiStatus === 'offline' ? 'bg-rose-500' : 'bg-amber-500 animate-pulse'
-          }`} />
+          <div className={`w-2.5 h-2.5 rounded-full ${apiStatus === 'online' ? 'bg-emerald-500 animate-pulse' :
+              apiStatus === 'offline' ? 'bg-rose-500' : 'bg-amber-500 animate-pulse'
+            }`} />
           <span className="text-xs font-semibold text-slate-700 dark:text-slate-350">
             {apiStatus === 'online' ? 'API Terhubung (Port 5000)' :
-             apiStatus === 'offline' ? 'API Terputus' : 'Memeriksa API...'}
+              apiStatus === 'offline' ? 'API Terputus' : 'Memeriksa API...'}
           </span>
           <button
             type="button"
@@ -218,9 +217,11 @@ export default function InputPage() {
                           <SelectValue placeholder="Pilih Unit" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="Unit 1">Unit 1</SelectItem>
-                          <SelectItem value="Unit 2">Unit 2</SelectItem>
-                          <SelectItem value="Unit 3">Unit 3</SelectItem>
+                          <SelectItem value="Unit 1">Blok 1</SelectItem>
+                          <SelectItem value="Unit 2">Blok 2</SelectItem>
+                          <SelectItem value="Unit 3">Blok 3</SelectItem>
+                          <SelectItem value="Unit 4">Blok 4</SelectItem>
+                          <SelectItem value="TANK">TANK</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -304,8 +305,8 @@ export default function InputPage() {
           >
             {/* Top Main Result Card */}
             <Card className={`border-2 overflow-hidden ${classificationResult.result === 'layak'
-                ? 'border-emerald-500/30 shadow-emerald-500/5 bg-gradient-to-br from-white to-emerald-50/20 dark:from-slate-950 dark:to-emerald-950/5'
-                : 'border-rose-500/30 shadow-rose-500/5 bg-gradient-to-br from-white to-rose-50/20 dark:from-slate-950 dark:to-rose-950/5'
+              ? 'border-emerald-500/30 shadow-emerald-500/5 bg-gradient-to-br from-white to-emerald-50/20 dark:from-slate-950 dark:to-emerald-950/5'
+              : 'border-rose-500/30 shadow-rose-500/5 bg-gradient-to-br from-white to-rose-50/20 dark:from-slate-950 dark:to-rose-950/5'
               } shadow-2xl`}>
               <div className="flex flex-col md:flex-row items-center justify-between p-8 md:p-10 border-b border-slate-200 dark:border-slate-800 gap-8">
 
@@ -476,8 +477,8 @@ export default function InputPage() {
                                 animate={{ width: `${percentage}%` }}
                                 transition={{ duration: 0.8, ease: 'easeOut' }}
                                 className={`h-full rounded-full ${classificationResult.result === 'layak'
-                                    ? 'bg-emerald-500'
-                                    : 'bg-rose-500'
+                                  ? 'bg-emerald-500'
+                                  : 'bg-rose-500'
                                   }`}
                               />
                             </div>

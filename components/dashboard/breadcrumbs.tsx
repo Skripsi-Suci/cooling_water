@@ -16,7 +16,6 @@ const routeMap: Record<string, string> = {
   dashboard: "Dashboard",
   input: "Input Klasifikasi",
   reports: "Riwayat Analisis",
-  performance: "Performa Model",
   users: "Kelola User",
 }
 
