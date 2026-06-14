@@ -10,7 +10,7 @@ export async function getDashboardStats() {
   // Fetch all classifications for the user (or all if admin, for now just user's)
   const { data, error } = await supabase
     .from('classifications')
-    .select('*')
+    .select('*, iron:Fe') // kolom DB "Fe" di-alias jadi "iron" agar konsisten dgn UI
     .order('date', { ascending: false })
 
   if (error || !data) return null

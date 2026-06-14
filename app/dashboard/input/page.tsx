@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { classificationSchema, type ClassificationInput } from '@/lib/schema'
+import { z } from 'zod'
+import { classificationSchema } from '@/lib/schema'
 import { processClassification, checkBackendStatus } from './actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -38,6 +39,9 @@ interface FlaskResponse {
   feature_importance: Record<string, number>
 }
 
+type ClassificationFormInput = z.input<typeof classificationSchema>
+type ClassificationFormOutput = z.output<typeof classificationSchema>
+
 export default function InputPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [classificationResult, setClassificationResult] = useState<{
@@ -59,13 +63,18 @@ export default function InputPage() {
   }
 
   useEffect(() => {
-    checkStatus()
+    const timeoutId = window.setTimeout(() => {
+      void checkStatus()
+    }, 0)
     const interval = setInterval(checkStatus, 15000)
-    return () => clearInterval(interval)
+    return () => {
+      window.clearTimeout(timeoutId)
+      clearInterval(interval)
+    }
   }, [])
 
-  const form = useForm<ClassificationInput>({
-    resolver: zodResolver(classificationSchema) as any,
+  const form = useForm<ClassificationFormInput, undefined, ClassificationFormOutput>({
+    resolver: zodResolver(classificationSchema),
     defaultValues: {
       unit_name: 'Unit 1',
       engine_id: '',
@@ -79,11 +88,12 @@ export default function InputPage() {
     }
   })
 
-  const onSubmit = async (data: ClassificationInput) => {
+  const onSubmit = async (data: ClassificationFormOutput) => {
     setIsSubmitting(true)
     try {
       const response = await processClassification(data)
       if (response.success && response.details) {
+        setApiStatus('online')
         setClassificationResult({
           result: response.result as 'layak' | 'tidak_layak',
           analysisNotes: response.analysisNotes as string,
@@ -93,7 +103,7 @@ export default function InputPage() {
       } else {
         toast.error(response.error || "Terjadi kesalahan")
       }
-    } catch (error) {
+    } catch {
       toast.error("Gagal memproses data")
     } finally {
       setIsSubmitting(false)
@@ -156,7 +166,7 @@ export default function InputPage() {
           </div>
           <div>
             <h1 className="text-lg font-bold text-slate-800 dark:text-slate-100">Klasifikasi Kualitas Cooling Water</h1>
-            <p className="text-xs text-slate-500 font-medium">Prediksi kelayakan cooling water terintegrasi dengan model Random Forest AI.</p>
+            <p className="text-xs text-slate-500 font-medium">Prediksi kelayakan cooling water terintegrasi dengan model Random Forest AI di Hugging Face Space.</p>
           </div>
         </div>
 
@@ -165,7 +175,7 @@ export default function InputPage() {
               apiStatus === 'offline' ? 'bg-rose-500' : 'bg-amber-500 animate-pulse'
             }`} />
           <span className="text-xs font-semibold text-slate-700 dark:text-slate-350">
-            {apiStatus === 'online' ? 'API Terhubung (Port 5000)' :
+            {apiStatus === 'online' ? 'API Terhubung (Hugging Face Space)' :
               apiStatus === 'offline' ? 'API Terputus' : 'Memeriksa API...'}
           </span>
           <button
@@ -194,7 +204,7 @@ export default function InputPage() {
                 <CardTitle className="text-xl font-bold text-slate-800 dark:text-slate-100">Input Data Parameter Cooling Water</CardTitle>
                 <CardDescription>Masukkan data operasional dan parameter kualitas air untuk melakukan klasifikasi kelayakan.</CardDescription>
               </CardHeader>
-              <form onSubmit={form.handleSubmit(onSubmit as any)}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
                 <CardContent className="p-8 space-y-10">
                   {/* Bagian 1: Identitas & Waktu */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
