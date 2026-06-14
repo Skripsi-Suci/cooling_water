@@ -135,7 +135,7 @@ export async function processClassification(data: ClassificationInput) {
     ph: validated.ph,
     sc: validated.sc,
     nitrite: validated.nitrite,
-    iron: validated.iron,
+    Fe: validated.iron, // kolom DB bernama "Fe" (case-sensitive), bukan "iron"
     sulfate: validated.sulfate,
     turbidity: validated.turbidity,
     result: result,
@@ -144,7 +144,10 @@ export async function processClassification(data: ClassificationInput) {
 
   if (error) {
     console.error("Database error:", error)
-    return { success: false, error: "Gagal menyimpan data ke database." }
+    return {
+      success: false,
+      error: `Gagal menyimpan data ke database: ${error.message}`,
+    }
   }
 
   revalidatePath("/dashboard/reports")

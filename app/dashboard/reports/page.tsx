@@ -8,7 +8,7 @@ async function getData() {
 
   const { data, error } = await supabase
     .from('classifications')
-    .select('*')
+    .select('*, iron:Fe') // kolom DB "Fe" di-alias jadi "iron" agar konsisten dgn UI
     .order('date', { ascending: false })
 
   if (error) {
