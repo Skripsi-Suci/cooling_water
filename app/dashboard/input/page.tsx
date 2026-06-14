@@ -93,6 +93,7 @@ export default function InputPage() {
     try {
       const response = await processClassification(data)
       if (response.success && response.details) {
+        setApiStatus('online')
         setClassificationResult({
           result: response.result as 'layak' | 'tidak_layak',
           analysisNotes: response.analysisNotes as string,
