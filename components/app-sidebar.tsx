@@ -40,10 +40,11 @@ const data = {
       url: "/dashboard/users",
       icon: <IconUsers />,
     },
+
     {
-      title: "Kelola Master Data",
-      url: "/dashboard/master-data",
-      icon: <IconDatabase />,
+      title: "Riwayat Semua User",
+      url: "/dashboard/global-reports",
+      icon: <IconReport />,
     },
   ],
 }
@@ -81,7 +82,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   // Filter items based on role
   const filteredNavItems = data.navMain.filter(item => {
-    if ((item.title === "Kelola User" || item.title === "Kelola Master Data") && userProfile?.role !== 'admin') {
+    if ((item.title === "Kelola User" || item.title === "Riwayat Semua User") && userProfile?.role !== 'admin') {
       return false;
     }
     return true;

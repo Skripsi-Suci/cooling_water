@@ -309,6 +309,7 @@ export default function InputPage() {
                       <Input
                         id="date"
                         type="date"
+                        required
                         {...form.register('date')}
                         className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11 focus:ring-primary focus:border-primary"
                       />
@@ -382,6 +383,7 @@ export default function InputPage() {
                         <Input
                           id="engine_id"
                           placeholder="Engine ID"
+                          required
                           {...form.register('engine_id')}
                           className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11"
                         />
@@ -394,6 +396,7 @@ export default function InputPage() {
                         type="number"
                         step="0.1"
                         placeholder="Jam Operasi"
+                        required
                         {...form.register('running_hour')}
                         className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11"
                       />
@@ -405,27 +408,27 @@ export default function InputPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                       <div className="space-y-2">
                         <Label htmlFor="ph" className="text-base font-medium">pH ({getParamLimitText('pH', 'Standard: 8 - 11')})</Label>
-                        <Input id="ph" type="number" step="0.01" {...form.register('ph')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
+                        <Input id="ph" type="number" step="0.01" required {...form.register('ph')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="sc" className="text-base font-medium">Specific Conductance (SC) ({getParamLimitText('SC', 'Standard: max 6000')})</Label>
-                        <Input id="sc" type="number" {...form.register('sc')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
+                        <Input id="sc" type="number" required {...form.register('sc')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="nitrite" className="text-base font-medium">Nitrite ({getParamLimitText('Nitrite', 'Standard: 500 - 1500')})</Label>
-                        <Input id="nitrite" type="number" {...form.register('nitrite')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
+                        <Input id="nitrite" type="number" required {...form.register('nitrite')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="iron" className="text-base font-medium">Fe (Besi) ({getParamLimitText('Fe', 'Standard: max 1.0')})</Label>
-                        <Input id="iron" type="number" step="0.01" {...form.register('iron')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
+                        <Input id="iron" type="number" step="0.01" required {...form.register('iron')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="sulfate" className="text-base font-medium">Sulfate ({getParamLimitText('Sulfate', 'Standard: max 100')})</Label>
-                        <Input id="sulfate" type="number" {...form.register('sulfate')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
+                        <Input id="sulfate" type="number" required {...form.register('sulfate')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="turbidity" className="text-base font-medium">Turbidity ({getParamLimitText('Turbidity', 'Standard: max 30')})</Label>
-                        <Input id="turbidity" type="number" step="0.1" {...form.register('turbidity')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
+                        <Input id="turbidity" type="number" step="0.1" required {...form.register('turbidity')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                     </div>
                   </div>
