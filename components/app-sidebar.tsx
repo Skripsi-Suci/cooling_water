@@ -14,7 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { IconDashboard, IconListDetails, IconChartBar, IconUsers, IconReport } from "@tabler/icons-react"
+import { IconDashboard, IconListDetails, IconChartBar, IconUsers, IconReport, IconDatabase } from "@tabler/icons-react"
 import { Zap } from "lucide-react"
 import Link from "next/link"
 
@@ -39,6 +39,11 @@ const data = {
       title: "Kelola User",
       url: "/dashboard/users",
       icon: <IconUsers />,
+    },
+    {
+      title: "Kelola Master Data",
+      url: "/dashboard/master-data",
+      icon: <IconDatabase />,
     },
   ],
 }
@@ -76,7 +81,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   // Filter items based on role
   const filteredNavItems = data.navMain.filter(item => {
-    if (item.title === "Kelola User" && userProfile?.role !== 'admin') {
+    if ((item.title === "Kelola User" || item.title === "Kelola Master Data") && userProfile?.role !== 'admin') {
       return false;
     }
     return true;

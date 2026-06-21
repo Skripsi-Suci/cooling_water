@@ -49,17 +49,21 @@ export const columns: ColumnDef<Classification>[] = [
     header: "Unit",
   },
   {
-    accessorKey: "engine_id",
-    header: "Engine ID",
+  accessorKey: "engine_id",
+  header: "Engine ID",
+},
+{
+  accessorKey: "running_hour",
+  header: "Running Hour",
+  cell: ({ row }) => {
+    const value = row.getValue("running_hour")
+    return `${value} k`
   },
-  {
-    accessorKey: "running_hour",
-    header: "Running Hour",
-  },
-  {
-    accessorKey: "ph",
-    header: "pH",
-  },
+},
+{
+  accessorKey: "ph",
+  header: "pH",
+},
   {
     accessorKey: "sc",
     header: "SC",

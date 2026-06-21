@@ -29,7 +29,7 @@ export default async function ReportsPage() {
           <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
             <FileText className="w-8 h-8 text-primary" /> Riwayat Analisis
           </h1>
-          <p className="text-muted-foreground">Kelola dan telusuri semua data klasifikasi cooling water.</p>
+          <p className="text-muted-foreground">Riwayat hasil analisis dan klasifikasi cooling water.</p>
         </div>
         <div className="flex items-center gap-2 px-4 py-2 bg-muted/50 rounded-lg border border-border/50 text-sm font-medium">
           <Database className="w-4 h-4 text-primary" />

@@ -24,7 +24,13 @@ export function RecentClassifications({ data }: { data: any[] }) {
           {data.map((item) => (
             <TableRow key={item.id} className="hover:bg-muted/30 transition-colors">
               <TableCell className="font-medium whitespace-nowrap">
-                {new Date(item.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
+                {new Date(item.date).toLocaleDateString('id-ID', { 
+                  day: '2-digit', 
+                  month: 'short', 
+                  year: 'numeric', 
+                  hour: '2-digit', 
+                  minute: '2-digit' 
+                })}
               </TableCell>
               <TableCell className="whitespace-nowrap">{item.unit_name}</TableCell>
               <TableCell className="whitespace-nowrap">{item.engine_id ?? '-'}</TableCell>

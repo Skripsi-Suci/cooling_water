@@ -67,6 +67,23 @@ export async function processClassification(data: ClassificationInput) {
   // Validate data
   const validated = classificationSchema.parse(data)
 
+  // Fetch dynamic SOP limits from master_parameters
+  let customLimitsPayload: Record<string, [number, number]> | undefined = undefined
+  try {
+    const { data: dbParams, error: dbError } = await supabase
+      .from('master_parameters')
+      .select('name, min_value, max_value')
+      
+    if (!dbError && dbParams && dbParams.length > 0) {
+      customLimitsPayload = {}
+      dbParams.forEach(param => {
+        customLimitsPayload![param.name] = [param.min_value, param.max_value]
+      })
+    }
+  } catch (dbErr) {
+    console.warn("Gagal mengambil batas parameter dari database, menggunakan batas default backend:", dbErr)
+  }
+
   const backendUrl = resolveBackendBaseUrl()
   let flaskResponse
 
@@ -84,6 +101,7 @@ export async function processClassification(data: ClassificationInput) {
         Fe: validated.iron,
         Sulfate: validated.sulfate,
         Turbidity: validated.turbidity,
+        custom_limits: customLimitsPayload,
       }),
     })
 

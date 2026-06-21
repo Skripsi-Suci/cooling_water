@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { classificationSchema } from '@/lib/schema'
 import { processClassification, checkBackendStatus } from './actions'
+import { getUnits, getEngines, getParameters } from '@/app/dashboard/master-data/actions'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -73,13 +74,22 @@ export default function InputPage() {
     }
   }, [])
 
+  const getLocalCalendarDateString = () => {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0')
+    const day = String(now.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
   const form = useForm<ClassificationFormInput, undefined, ClassificationFormOutput>({
     resolver: zodResolver(classificationSchema),
     defaultValues: {
+      date: getLocalCalendarDateString(),
       unit_name: 'Unit 1',
       engine_id: '',
       running_hour: 0,
-      ph: 7,
+      ph: 0,
       sc: 0,
       nitrite: 0,
       iron: 0,
@@ -88,10 +98,82 @@ export default function InputPage() {
     }
   })
 
+  // Master data states
+  const [dbUnits, setDbUnits] = useState<any[]>([])
+  const [dbEngines, setDbEngines] = useState<any[]>([])
+  const [dbParams, setDbParams] = useState<any[]>([])
+  const [isDbLoaded, setIsDbLoaded] = useState(false)
+
+  useEffect(() => {
+    async function loadMasterData() {
+      try {
+        const unitsRes = await getUnits()
+        if (unitsRes.success && unitsRes.data && unitsRes.data.length > 0) {
+          const enginesRes = await getEngines()
+          const paramsRes = await getParameters()
+          
+          setDbUnits(unitsRes.data)
+          if (enginesRes.success && enginesRes.data) setDbEngines(enginesRes.data)
+          if (paramsRes.success && paramsRes.data) setDbParams(paramsRes.data)
+          setIsDbLoaded(true)
+          
+          // Set default unit and first engine for it
+          const defaultUnit = unitsRes.data[0].name
+          form.setValue('unit_name', defaultUnit)
+          
+          if (enginesRes.success && enginesRes.data) {
+            const firstEngine = enginesRes.data.find((e: any) => e.unit_name === defaultUnit)
+            if (firstEngine) {
+              form.setValue('engine_id', firstEngine.engine_id)
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Gagal memuat master data, menggunakan fallback statis:", err)
+      }
+    }
+    loadMasterData()
+  }, [])
+
+  const getParamLimitText = (name: string, defaultText: string) => {
+    const param = dbParams.find(p => p.name === name)
+    if (!param) return defaultText
+    
+    if (name === 'SC' || name === 'Fe' || name === 'Sulfate' || name === 'Turbidity') {
+      return `Standard: max ${param.max_value}${param.unit !== '-' ? ' ' + param.unit : ''}`
+    }
+    return `Standard: ${param.min_value} - ${param.max_value}${param.unit !== '-' ? ' ' + param.unit : ''}`
+  }
+
   const onSubmit = async (data: ClassificationFormOutput) => {
     setIsSubmitting(true)
     try {
-      const response = await processClassification(data)
+      let isoDate: string
+      if (data.date) {
+        const parts = data.date.split('-')
+        const year = parseInt(parts[0], 10)
+        const month = parseInt(parts[1], 10) - 1
+        const day = parseInt(parts[2], 10)
+        const now = new Date()
+        const combined = new Date(
+          year,
+          month,
+          day,
+          now.getHours(),
+          now.getMinutes(),
+          now.getSeconds(),
+          now.getMilliseconds()
+        )
+        isoDate = combined.toISOString()
+      } else {
+        isoDate = new Date().toISOString()
+      }
+
+      const formattedData = {
+        ...data,
+        date: isoDate
+      }
+      const response = await processClassification(formattedData)
       if (response.success && response.details) {
         setApiStatus('online')
         setClassificationResult({
@@ -112,7 +194,21 @@ export default function InputPage() {
 
   const handleReset = () => {
     setClassificationResult(null)
-    form.reset()
+    const defaultUnit = dbUnits[0]?.name || 'Unit 1'
+    const firstEngine = dbEngines.find(e => e.unit_name === defaultUnit)?.engine_id || ''
+    
+    form.reset({
+      date: getLocalCalendarDateString(),
+      unit_name: defaultUnit,
+      engine_id: firstEngine,
+      running_hour: 0,
+      ph: 0,
+      sc: 0,
+      nitrite: 0,
+      iron: 0,
+      sulfate: 0,
+      turbidity: 0,
+    })
   }
 
   // Helper to get warning styles
@@ -166,7 +262,7 @@ export default function InputPage() {
           </div>
           <div>
             <h1 className="text-lg font-bold text-slate-800 dark:text-slate-100">Klasifikasi Kualitas Cooling Water</h1>
-            <p className="text-xs text-slate-500 font-medium">Prediksi kelayakan cooling water terintegrasi dengan model Random Forest AI di Hugging Face Space.</p>
+            <p className="text-xs text-slate-500 font-medium">Klasifikasi kelayakan cooling water terintegrasi dengan model Random Forest dan Standar Nilai Parameter.</p>
           </div>
         </div>
 
@@ -219,30 +315,77 @@ export default function InputPage() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="unit_name" className="text-base font-medium">Unit</Label>
-                      <Select
-                        onValueChange={(val) => form.setValue('unit_name', val)}
-                        defaultValue="Unit 1"
-                      >
-                        <SelectTrigger className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11">
-                          <SelectValue placeholder="Pilih Unit" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Unit 1">Blok 1</SelectItem>
-                          <SelectItem value="Unit 2">Blok 2</SelectItem>
-                          <SelectItem value="Unit 3">Blok 3</SelectItem>
-                          <SelectItem value="Unit 4">Blok 4</SelectItem>
-                          <SelectItem value="TANK">TANK</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      {isDbLoaded ? (
+                        <Select
+                          onValueChange={(val) => {
+                            form.setValue('unit_name', val)
+                            // Cari engine pertama untuk unit ini
+                            const engs = dbEngines.filter(e => e.unit_name === val)
+                            if (engs.length > 0) {
+                              form.setValue('engine_id', engs[0].engine_id)
+                            } else {
+                              form.setValue('engine_id', '')
+                            }
+                          }}
+                          value={form.watch('unit_name')}
+                        >
+                          <SelectTrigger className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11">
+                            <SelectValue placeholder="Pilih Unit" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {dbUnits.map((u) => (
+                              <SelectItem key={u.id} value={u.name}>{u.name} {u.description ? `(${u.description})` : ''}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Select
+                          onValueChange={(val) => form.setValue('unit_name', val)}
+                          defaultValue="Unit 1"
+                        >
+                          <SelectTrigger className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11">
+                            <SelectValue placeholder="Pilih Unit" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Unit 1">Blok 1</SelectItem>
+                            <SelectItem value="Unit 2">Blok 2</SelectItem>
+                            <SelectItem value="Unit 3">Blok 3</SelectItem>
+                            <SelectItem value="Unit 4">Blok 4</SelectItem>
+                            <SelectItem value="TANK">TANK</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="engine_id" className="text-base font-medium">Engine</Label>
-                      <Input
-                        id="engine_id"
-                        placeholder="ID Mesin"
-                        {...form.register('engine_id')}
-                        className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11"
-                      />
+                      <Label htmlFor="engine_id" className="text-base font-medium">Sample</Label>
+                      {isDbLoaded ? (
+                        <Select
+                          onValueChange={(val) => form.setValue('engine_id', val)}
+                          value={form.watch('engine_id')}
+                        >
+                          <SelectTrigger className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11">
+                            <SelectValue placeholder="Pilih Engine" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {dbEngines
+                              .filter(e => e.unit_name === form.watch('unit_name'))
+                              .map(e => (
+                                <SelectItem key={e.id} value={e.engine_id}>{e.engine_id} {e.description ? `(${e.description})` : ''}</SelectItem>
+                              ))
+                            }
+                            {dbEngines.filter(e => e.unit_name === form.watch('unit_name')).length === 0 && (
+                              <SelectItem value="-" disabled>Tidak ada engine di unit ini</SelectItem>
+                            )}
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Input
+                          id="engine_id"
+                          placeholder="Engine ID"
+                          {...form.register('engine_id')}
+                          className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11"
+                        />
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="running_hour" className="text-base font-medium">Running Hour</Label>
@@ -261,27 +404,27 @@ export default function InputPage() {
                     <h3 className="text-lg font-bold text-slate-700 dark:text-slate-300">Parameter Cooling Water</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                       <div className="space-y-2">
-                        <Label htmlFor="ph" className="text-base font-medium">pH (Standard: 8 - 11)</Label>
+                        <Label htmlFor="ph" className="text-base font-medium">pH ({getParamLimitText('pH', 'Standard: 8 - 11')})</Label>
                         <Input id="ph" type="number" step="0.01" {...form.register('ph')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="sc" className="text-base font-medium">Specific Conductance (SC) (Standard: max 6000)</Label>
+                        <Label htmlFor="sc" className="text-base font-medium">Specific Conductance (SC) ({getParamLimitText('SC', 'Standard: max 6000')})</Label>
                         <Input id="sc" type="number" {...form.register('sc')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="nitrite" className="text-base font-medium">Nitrite (Standard: 500 - 1500)</Label>
+                        <Label htmlFor="nitrite" className="text-base font-medium">Nitrite ({getParamLimitText('Nitrite', 'Standard: 500 - 1500')})</Label>
                         <Input id="nitrite" type="number" {...form.register('nitrite')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="iron" className="text-base font-medium">Fe (Besi) (Standard: max 1.0)</Label>
+                        <Label htmlFor="iron" className="text-base font-medium">Fe (Besi) ({getParamLimitText('Fe', 'Standard: max 1.0')})</Label>
                         <Input id="iron" type="number" step="0.01" {...form.register('iron')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="sulfate" className="text-base font-medium">Sulfate (Standard: max 100)</Label>
+                        <Label htmlFor="sulfate" className="text-base font-medium">Sulfate ({getParamLimitText('Sulfate', 'Standard: max 100')})</Label>
                         <Input id="sulfate" type="number" {...form.register('sulfate')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="turbidity" className="text-base font-medium">Turbidity (Standard: max 30)</Label>
+                        <Label htmlFor="turbidity" className="text-base font-medium">Turbidity ({getParamLimitText('Turbidity', 'Standard: max 30')})</Label>
                         <Input id="turbidity" type="number" step="0.1" {...form.register('turbidity')} className="bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 h-11" />
                       </div>
                     </div>
@@ -559,7 +702,7 @@ export default function InputPage() {
                 Input Data Baru
               </Button>
               <Button className="sm:w-1/3 h-12 text-base font-semibold" onClick={() => window.location.href = '/dashboard/reports'}>
-                Lihat Riwayat Laporan
+                Lihat Riwayat Analisis
               </Button>
             </div>
           </motion.div>

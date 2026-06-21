@@ -40,8 +40,8 @@ export default async function DashboardPage() {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Dashboard Analitik</h1>
-          <p className="text-muted-foreground">Monitoring kualitas cooling water secara real-time.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Dashboard</h1>
+          <p className="text-muted-foreground">Monitoring kondisi kualitas cooling water</p>
         </div>
         <Button asChild className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20">
           <Link href="/dashboard/input" className="flex items-center gap-2">
@@ -79,7 +79,7 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-600">{stats.tidakLayak}</div>
-            <p className="text-xs text-muted-foreground">Memerlukan perhatian</p>
+            <p className="text-xs text-muted-foreground">Hasil evaluasi tidak layak</p>
           </CardContent>
         </Card>
         <Card className="border-border/50 shadow-sm bg-card/50 backdrop-blur-sm">
@@ -91,7 +91,7 @@ export default async function DashboardPage() {
             <div className="text-sm font-semibold truncate">
               {stats.recentClassifications[0] ? new Date(stats.recentClassifications[0].date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) : '-'}
             </div>
-            <p className="text-xs text-muted-foreground">Sinkronisasi Supabase</p>
+            <p className="text-xs text-muted-foreground">Data terakhir tercatat</p>
           </CardContent>
         </Card>
       </div>
@@ -101,7 +101,7 @@ export default async function DashboardPage() {
         <Card className="lg:col-span-4 border-border/50 shadow-md">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-primary" /> Tren Parameter
+              <TrendingUp className="w-5 h-5 text-primary" /> Tren Nilai Parameter Cooling Water
             </CardTitle>
             <CardDescription>Fluktuasi pH, SC, Nitrite, Fe, Sulfate, dan Turbidity pada 10 analisis terakhir.</CardDescription>
           </CardHeader>

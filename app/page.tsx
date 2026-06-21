@@ -61,7 +61,7 @@ export default function LandingPage() {
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-600/20 dark:border-blue-500/30 bg-blue-600/5 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-bold mb-8"
         >
           <span className="flex h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-500 animate-ping" />
-          Powered by AI (Random Forest)
+          Model Klasifikasi (Random Forest)
         </motion.div>
 
         <motion.h1 
@@ -70,9 +70,9 @@ export default function LandingPage() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6 leading-[1.1]"
         >
-          Klasifikasi Kualitas Air <br />
+          Klasifikasi Kelayakan <br />
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 dark:from-blue-400 dark:via-blue-200 dark:to-amber-200">
-            Lebih Cerdas & Akurat
+            Cooling Water
           </span>
         </motion.h1>
 
@@ -82,7 +82,7 @@ export default function LandingPage() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed"
         >
-          Sistem monitoring dan klasifikasi kelayakan air pendingin berbasis kecerdasan buatan untuk optimalisasi operasional di 
+          Sistem klasifikasi dan pemantauan kualitas cooling water berdasarkan standar parameter dan model Random Forest untuk mendukung evaluasi operasional di 
           <span className="text-slate-900 dark:text-white font-semibold"> PT PLN Nusantara Power UP Arun.</span>
         </motion.p>
 
@@ -114,20 +114,20 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             {
-              title: "Analisis Real-time",
-              desc: "Proses klasifikasi data parameter air dalam hitungan detik dengan akurasi tinggi.",
+              title: "Klasifikasi Kelayakan",
+              desc: "Menentukan status kelayakan cooling water berdasarkan parameter kualitas dan model Random Forest.",
               icon: <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
               borderColor: "hover:border-blue-500/50"
             },
             {
-              title: "Manajemen Terpusat",
-              desc: "Kelola data unit, parameter teknik, dan laporan dalam satu dashboard terintegrasi.",
+              title: "Analisis & Riwayat Data",
+              desc: "Menyimpan dan menampilkan riwayat hasil klasifikasi untuk mendukung proses evaluasi operasional.",
               icon: <BarChart3 className="w-6 h-6 text-amber-600 dark:text-amber-400" />,
               borderColor: "hover:border-amber-500/50"
             },
             {
               title: "Keamanan Role-Based",
-              desc: "Akses data terkontrol berdasarkan peran Admin dan Operator untuk integritas data.",
+              desc: "Akses data terkontrol berdasarkan peran Admin dan Operator guna menjaga keamanan dan integritas data.",
               icon: <ShieldCheck className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />,
               borderColor: "hover:border-emerald-500/50"
             }
@@ -155,7 +155,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2 opacity-70">
             <Zap className="w-4 h-4 text-blue-600 dark:text-white fill-current" />
-            <span className="text-sm font-bold tracking-tight text-slate-900 dark:text-white uppercase">Cooling Water AI</span>
+            <span className="text-sm font-bold tracking-tight text-slate-900 dark:text-white uppercase">Cooling Water</span>
           </div>
           <p className="text-slate-500 dark:text-slate-500 text-sm font-medium">
             &copy; 2026 PT PLN Nusantara Power UP Arun. Developed for Advanced Monitoring.
