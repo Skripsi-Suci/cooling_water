@@ -42,7 +42,7 @@ const data = {
     },
 
     {
-      title: "Riwayat Semua User",
+      title: "Riwayat Global",
       url: "/dashboard/global-reports",
       icon: <IconReport />,
     },
